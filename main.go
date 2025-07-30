@@ -30,39 +30,39 @@ func CadastarPessoa(p Pessoa) {
 	for {
 		//--Cdastra nome--
 		for i := 0; i < tentativas; i++ {
-		fmt.Print("Digite o nome: ")
-		scanner.Scan()
-		p.Nome = scanner.Text()
-		if len(p.Nome) > 2 {
-			break
+			fmt.Print("Digite o nome: ")
+			scanner.Scan()
+			p.Nome = scanner.Text()
+			if len(p.Nome) > 2 {
+				break
 			} else {
 				fmt.Println("Nome inválido! Tente novamente.")
 			}
 			if i == tentativas-1 {
 				fmt.Println("Numero de tentativas atingido. Encerrando o programa...")
 				os.Exit(1)
+			}
 		}
-
 		//--Cadastra idade--
 		for i := 0; i < tentativas; i++ {
-		fmt.Print("Digite a idade: ")
-		scanner.Scan()
-		idadeStr := scanner.Text()
-		idade, err := strconv.Atoi(idadeStr)
-		if err != nil {
-			os.Exit(0)
-		}
-		if idade > 0 || idade < 150 {
-			break
+			fmt.Print("Digite a idade: ")
+			scanner.Scan()
+			idadeStr := scanner.Text()
+			idade, err := strconv.Atoi(idadeStr)
+			if err != nil {
+				os.Exit(0)
+			}
+			if idade > 0 && idade < 150 {
+				break
 			} else {
 				fmt.Println("Idade inválida! Tente novamente.")
 			}
 			if i == tentativas-1 {
 				fmt.Println("Numero de tentativas atingido. Encerrando o programa...")
 				os.Exit(1)
+			}
+			p.Idade = idade
 		}
-		p.Idade = idade
-
 		//--Cadastra CPF--
 		for i := 0; i < tentativas; i++ {
 			fmt.Print("Digite o CPF: ")
@@ -80,15 +80,15 @@ func CadastarPessoa(p Pessoa) {
 		}
 		//--Cadastra Altura--
 		for i := 0; i < tentativas; i++ {
-		fmt.Print("Digite a altura: ")
-		scanner.Scan()
-		alturaStr := scanner.Text()
-		altura, err := strconv.ParseFloat(alturaStr, 64)
-		if err != nil {
-			os.Exit(0)
-		}
-		p.Altura = altura
-		if p.Altura > 0.5 || p.Altura < 2.5 {
+			fmt.Print("Digite a altura: ")
+			scanner.Scan()
+			alturaStr := scanner.Text()
+			altura, err := strconv.ParseFloat(alturaStr, 64)
+			if err != nil {
+				os.Exit(0)
+			}
+			p.Altura = altura
+			if p.Altura > 0.5 && p.Altura < 2.5 {
 				break
 			} else {
 				fmt.Println("Altura inválida! Tente novamente.")
