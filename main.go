@@ -8,12 +8,14 @@ import (
 )
 
 type Pessoa struct {
+	Id     int
 	Nome   string
 	Idade  int
 	CPF    string
 	Altura float64
 }
 
+var id = 1
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
@@ -120,8 +122,11 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 			}
 		}
 
+		p.Id = id
+		id++
 		//--Adicionando a pessoa no slice
 		pessoas = append(pessoas, p)
+		p.Id++
 		fmt.Print("Deseja continuar cadastrando? s/n: ")
 		scanner.Scan()
 		opcao = scanner.Text()
@@ -140,6 +145,6 @@ func ListarPessoas(pessoas []Pessoa) {
 	//--lendo os dados do slice
 	fmt.Println("\nPessoas Cadastradas")
 	for _, p := range pessoas {
-		fmt.Printf("Nome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Nome, p.Idade, p.CPF, p.Altura)
+		fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
 	}
 }
