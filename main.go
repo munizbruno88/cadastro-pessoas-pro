@@ -17,16 +17,37 @@ type Pessoa struct {
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
+	var opcao int
+	var pessoas []Pessoa
+	for {
+		fmt.Println("-----------------------------------------")
+		fmt.Println("Sistema de Cadastro de Pessoas")
+		fmt.Println("1 - Cadastrar Pessoas")
+		fmt.Println("2 - Listar Pessoas")
+		fmt.Println("0 - Sair")
+		fmt.Println("-----------------------------------------")
+		fmt.Print("Digite um comando: ")
+		fmt.Scanln(&opcao)
+		fmt.Println("")
+		switch opcao {
+		case 1:
+			pessoas = CadastarPessoa(pessoas)
 
-	CadastarPessoa(Pessoa{})
-
+		case 2:
+			ListarPessoas(pessoas)
+		case 0:
+			os.Exit(0)
+		default:
+			fmt.Println("Numero inválido! Tente novamente.")
+			os.Exit(0)
+		}
+	}
 }
 
-func CadastarPessoa(p Pessoa) {
+func CadastarPessoa(pessoas []Pessoa) []Pessoa {
+	var p Pessoa
 	var opcao string
 	tentativas := 3
-	var pessoas []Pessoa
-	fmt.Println("Sistema de Cadastro de Pessoas")
 	for {
 		//--Cdastra nome--
 		for i := 0; i < tentativas; i++ {
@@ -104,17 +125,21 @@ func CadastarPessoa(p Pessoa) {
 		fmt.Print("Deseja continuar cadastrando? s/n: ")
 		scanner.Scan()
 		opcao = scanner.Text()
-
+		fmt.Println("")
 		if opcao == "s" {
 			continue
 		} else if opcao == "n" {
-			//--lendo os dados do slice
-			for _, p := range pessoas {
-				fmt.Println("\nPessoas Cadastradas")
-				fmt.Printf("Nome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm ", p.Nome, p.Idade, p.CPF, p.Altura)
-				os.Exit(0)
-			}
+			//fmt.Println(pessoas)
+			return pessoas
 		}
 
+	}
+}
+
+func ListarPessoas(pessoas []Pessoa) {
+	//--lendo os dados do slice
+	fmt.Println("\nPessoas Cadastradas")
+	for _, p := range pessoas {
+		fmt.Printf("Nome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Nome, p.Idade, p.CPF, p.Altura)
 	}
 }
