@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type Pessoa struct {
@@ -23,9 +24,10 @@ func main() {
 	var pessoas []Pessoa
 	for {
 		fmt.Println("-----------------------------------------")
-		fmt.Println("Sistema de Cadastro de Pessoas")
+		fmt.Println("###--SISTEMA DE CADASTRO DE PESSOAS--##")
 		fmt.Println("1 - Cadastrar Pessoas")
 		fmt.Println("2 - Listar Pessoas")
+		fmt.Println("3 - Buscar Pessoas")
 		fmt.Println("0 - Sair")
 		fmt.Println("-----------------------------------------")
 		fmt.Print("Digite um comando: ")
@@ -37,6 +39,8 @@ func main() {
 
 		case 2:
 			ListarPessoas(pessoas)
+		case 3:
+			BuscarPessoas(pessoas)
 		case 0:
 			os.Exit(0)
 		default:
@@ -76,6 +80,7 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 				os.Exit(0)
 			}
 			if idade > 0 && idade < 150 {
+				p.Idade = idade
 				break
 			} else {
 				fmt.Println("Idade inválida! Tente novamente.")
@@ -84,7 +89,7 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 				fmt.Println("Numero de tentativas atingido. Encerrando o programa...")
 				os.Exit(1)
 			}
-			p.Idade = idade
+
 		}
 		//--Cadastra CPF--
 		for i := 0; i < tentativas; i++ {
@@ -126,7 +131,6 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 		id++
 		//--Adicionando a pessoa no slice
 		pessoas = append(pessoas, p)
-		p.Id++
 		fmt.Print("Deseja continuar cadastrando? s/n: ")
 		scanner.Scan()
 		opcao = scanner.Text()
@@ -135,16 +139,72 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 			continue
 		} else if opcao == "n" {
 			//fmt.Println(pessoas)
-			return pessoas
+			break
+		} else {
+			fmt.Println("Valor digitado inválido.")
+			os.Exit(0)
 		}
 
 	}
+	return pessoas
 }
 
 func ListarPessoas(pessoas []Pessoa) {
 	//--lendo os dados do slice
-	fmt.Println("\nPessoas Cadastradas")
+	fmt.Println("\n##--PESSOAS CADASTRADAS--##")
 	for _, p := range pessoas {
 		fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
 	}
+}
+
+func BuscarPessoas(pessoas []Pessoa) {
+	var opcao int
+	fmt.Println("Selecione as opções abaixo.")
+	fmt.Println("1 - Busca por nome:")
+	fmt.Println("2 - Busca por ID:")
+	fmt.Println("0 - Voltar")
+	fmt.Scanln(&opcao)
+
+	switch opcao {
+	case 1:
+		fmt.Print("Digite o nome: ")
+		scanner.Scan()
+		nome := strings.ToLower(scanner.Text())
+		encontrado := false
+		for _, n := range pessoas {
+			if strings.Contains(strings.ToLower(n.Nome), nome) {
+				fmt.Println(n)
+				encontrado = true
+			}
+		}
+		if !encontrado {
+			fmt.Println("não encontrado.")
+
+		}
+	case 2:
+		fmt.Print("Digite o ID: ")
+		scanner.Scan()
+		iDStr := scanner.Text()
+		iD, err := strconv.Atoi(iDStr)
+		if err != nil {
+			os.Exit(0)
+		}
+		encontrado := false
+		for _, i := range pessoas {
+			if i.Id == iD {
+				fmt.Println(i)
+				encontrado = true
+			}
+		}
+		if !encontrado {
+			fmt.Println("não encontrado.")
+		}
+	case 0:
+		break
+	default:
+		fmt.Println("Digite uma opção valida.")
+		os.Exit(0)
+
+	}
+
 }
