@@ -16,7 +16,7 @@ type Pessoa struct {
 	Altura float64
 }
 
-var id = 1
+var id = 1 //implementa o id da pessoa iniciando em 1
 var scanner = bufio.NewScanner(os.Stdin)
 
 func main() {
@@ -31,21 +31,32 @@ func main() {
 		fmt.Println("0 - Sair")
 		fmt.Println("-----------------------------------------")
 		fmt.Print("Digite um comando: ")
-		fmt.Scanln(&opcao)
+		_, err := fmt.Scanln(&opcao)
+		if err != nil {
+			fmt.Println("Opção inválida! Digite apenas numeros.")
+			break
+		}
 		fmt.Println("")
 		switch opcao {
 		case 1:
+			clear()
 			pessoas = CadastarPessoa(pessoas)
 
 		case 2:
+			clear()
 			ListarPessoas(pessoas)
+
 		case 3:
+			clear()
 			BuscarPessoas(pessoas)
+
 		case 0:
 			os.Exit(0)
 		default:
+			clear()
 			fmt.Println("Numero inválido! Tente novamente.")
-			os.Exit(0)
+			continue
+
 		}
 	}
 }
@@ -131,14 +142,17 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 		id++
 		//--Adicionando a pessoa no slice
 		pessoas = append(pessoas, p)
+		clear()
 		fmt.Print("Deseja continuar cadastrando? s/n: ")
 		scanner.Scan()
 		opcao = scanner.Text()
 		fmt.Println("")
 		if opcao == "s" {
+			clear()
 			continue
 		} else if opcao == "n" {
 			//fmt.Println(pessoas)
+			clear()
 			break
 		} else {
 			fmt.Println("Valor digitado inválido.")
@@ -150,61 +164,96 @@ func CadastarPessoa(pessoas []Pessoa) []Pessoa {
 }
 
 func ListarPessoas(pessoas []Pessoa) {
-	//--lendo os dados do slice
-	fmt.Println("\n##--PESSOAS CADASTRADAS--##")
-	for _, p := range pessoas {
-		fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+	if len(pessoas) == 0 {
+		fmt.Println("Não há pessoas cadastradas!")
+	} else {
+		fmt.Println("\n##--PESSOAS CADASTRADAS--##")
+		for _, p := range pessoas {
+			fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+
+		}
+		fmt.Print("Digite 0 para voltar: ")
+		scanner.Scan()
+		sairStr := scanner.Text()
+		sair, err := strconv.Atoi(sairStr)
+		if err != nil {
+			os.Exit(0)
+		}
+		if sair == 0 {
+			clear()
+			return
+		} else {
+			clear()
+			fmt.Println("Opção inválida! Encerrando programa...")
+			os.Exit(0)
+		}
 	}
 }
 
 func BuscarPessoas(pessoas []Pessoa) {
 	var opcao int
-	fmt.Println("Selecione as opções abaixo.")
-	fmt.Println("1 - Busca por nome:")
-	fmt.Println("2 - Busca por ID:")
-	fmt.Println("0 - Voltar")
-	fmt.Scanln(&opcao)
-
-	switch opcao {
-	case 1:
-		fmt.Print("Digite o nome: ")
-		scanner.Scan()
-		nome := strings.ToLower(scanner.Text())
-		encontrado := false
-		for _, n := range pessoas {
-			if strings.Contains(strings.ToLower(n.Nome), nome) {
-				fmt.Println(n)
-				encontrado = true
-			}
-		}
-		if !encontrado {
-			fmt.Println("não encontrado.")
-
-		}
-	case 2:
-		fmt.Print("Digite o ID: ")
-		scanner.Scan()
-		iDStr := scanner.Text()
-		iD, err := strconv.Atoi(iDStr)
+	for {
+		fmt.Println("Selecione as opções abaixo.")
+		fmt.Println("1 - Busca por nome:")
+		fmt.Println("2 - Busca por ID:")
+		fmt.Println("0 - Voltar")
+		fmt.Print("Digite uma opção: ")
+		_, err := fmt.Scanln(&opcao)
 		if err != nil {
-			os.Exit(0)
+			clear()
+			fmt.Println("Opção inválida! Digite apenas numeros.")
+			fmt.Println("")
+			continue
 		}
-		encontrado := false
-		for _, i := range pessoas {
-			if i.Id == iD {
-				fmt.Println(i)
-				encontrado = true
+		fmt.Println("")
+		switch opcao {
+		case 1:
+			clear()
+			fmt.Print("Digite o nome: ")
+			scanner.Scan()
+			nome := strings.ToLower(scanner.Text())
+			encontrado := false
+			for _, p := range pessoas {
+				if strings.Contains(strings.ToLower(p.Nome), nome) {
+					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+					encontrado = true
+				}
 			}
-		}
-		if !encontrado {
-			fmt.Println("não encontrado.")
-		}
-	case 0:
-		break
-	default:
-		fmt.Println("Digite uma opção valida.")
-		os.Exit(0)
+			if !encontrado {
+				fmt.Println("Pessoa não encontrada.")
 
+			}
+		case 2:
+			fmt.Print("Digite o ID: ")
+			scanner.Scan()
+			iDStr := scanner.Text()
+			iD, err := strconv.Atoi(iDStr)
+			if err != nil {
+				os.Exit(0)
+			}
+			encontrado := false
+			for _, p := range pessoas {
+				if p.Id == iD {
+					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+					encontrado = true
+				}
+			}
+			if !encontrado {
+				fmt.Println("Pessoa não encontrada.")
+			}
+		case 0:
+			return
+		default:
+			clear()
+			fmt.Println("Opção inválida! Tente novamente.")
+			fmt.Println("")
+			continue
+
+		}
 	}
 
+}
+
+func clear() {
+	fmt.Print("\033[H\033[2J")
 }
