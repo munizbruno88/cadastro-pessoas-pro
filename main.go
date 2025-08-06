@@ -212,10 +212,12 @@ func BuscarPessoas(pessoas []Pessoa) {
 			fmt.Print("Digite o nome: ")
 			scanner.Scan()
 			nome := strings.ToLower(scanner.Text())
+
 			encontrado := false
 			for _, p := range pessoas {
 				if strings.Contains(strings.ToLower(p.Nome), nome) {
 					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+					Editar(&pessoas, p.Id)
 					encontrado = true
 				}
 			}
@@ -235,6 +237,7 @@ func BuscarPessoas(pessoas []Pessoa) {
 			for _, p := range pessoas {
 				if p.Id == iD {
 					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+					Editar(&pessoas, p.Id)
 					encontrado = true
 				}
 			}
@@ -256,4 +259,23 @@ func BuscarPessoas(pessoas []Pessoa) {
 
 func clear() {
 	fmt.Print("\033[H\033[2J")
+}
+
+func Editar(pessoas *[]Pessoa, id int) {
+	fmt.Print("Deseja Editar o nome? s/n: ")
+	scanner.Scan()
+	sN := scanner.Text()
+	if sN == "s" {
+		fmt.Print("Digite o novo nome: ")
+		scanner.Scan()
+		novoNome := scanner.Text()
+		for i := range *pessoas {
+			if (*pessoas)[i].Id == id {
+				(*pessoas)[i].Nome = novoNome
+				fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", (*pessoas)[i].Id, (*pessoas)[i].Nome, (*pessoas)[i].Idade, (*pessoas)[i].CPF, (*pessoas)[i].Altura)
+			}
+		}
+
+	}
+
 }
