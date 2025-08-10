@@ -34,37 +34,9 @@ func BuscarPessoas(pessoas *[]models.Pessoa) {
 			for _, p := range *pessoas {
 				if strings.Contains(strings.ToLower(p.Nome), nome) {
 					utils.Clear()
-					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
 					encontrado = true
-					fmt.Println("1 - Editar")
-					fmt.Println("2 - Deletar")
-					fmt.Println("0 - Voltar")
-					opcaoBuscaStr := utils.ReadLine()
-					opcaoBusca, err := strconv.Atoi(opcaoBuscaStr)
-					if err != nil {
-						os.Exit(0)
-					}
-					switch opcaoBusca {
-					case 1:
-						Editar(pessoas, p.Id)
-					case 2:
-						fmt.Print("Tem certeza que deseja excluir? s/n: ")
-						sN := utils.ReadLine()
-						switch sN {
-						case "s":
-							delete(pessoas, p.Id)
-						case "n":
-							return
-						}
-					case 0:
-						utils.Clear()
-						return
-					default:
-						fmt.Println("Opção inválida! Tente novamente.")
-						fmt.Println("")
-						continue
-
-					}
+					BuscaMenu(p, pessoas)
+					return
 
 				}
 			}
@@ -84,37 +56,9 @@ func BuscarPessoas(pessoas *[]models.Pessoa) {
 			for _, p := range *pessoas {
 				if p.Id == iD {
 					utils.Clear()
-					fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
 					encontrado = true
-					fmt.Println("1 - Editar")
-					fmt.Println("2 - Deletar")
-					fmt.Println("0 - Voltar")
-					opcaoBuscaStr := utils.ReadLine()
-					opcaoBusca, err := strconv.Atoi(opcaoBuscaStr)
-					if err != nil {
-						os.Exit(0)
-					}
-					switch opcaoBusca {
-					case 1:
-						Editar(pessoas, p.Id)
-					case 2:
-						fmt.Print("Tem certeza que deseja excluir? s/n: ")
-						sN := utils.ReadLine()
-						switch sN {
-						case "s":
-							delete(pessoas, p.Id)
-						case "n":
-							return
-						}
-					case 0:
-						utils.Clear()
-						return
-					default:
-						fmt.Println("Opção inválida! Tente novamente.")
-						fmt.Println("")
-						continue
-
-					}
+					BuscaMenu(p, pessoas)
+					return
 
 				}
 			}
@@ -150,7 +94,7 @@ func Editar(pessoas *[]models.Pessoa, id int) {
 
 }
 
-func delete(pessoas *[]models.Pessoa, id int) {
+func deletarPessoa(pessoas *[]models.Pessoa, id int) {
 	for i := range *pessoas {
 		if (*pessoas)[i].Id == id {
 			*pessoas = append((*pessoas)[:i], (*pessoas)[i+1:]...)
@@ -160,4 +104,30 @@ func delete(pessoas *[]models.Pessoa, id int) {
 		}
 	}
 	fmt.Println("Pessoa não encontrada!")
+}
+
+func BuscaMenu(p models.Pessoa, pessoas *[]models.Pessoa) {
+	fmt.Printf("ID: %d\nNome: %s\nIdade: %danos\nCPF: %s\nAltura: %.2fm\n\n", p.Id, p.Nome, p.Idade, p.CPF, p.Altura)
+	fmt.Println("1 - Editar")
+	fmt.Println("2 - Deletar")
+	fmt.Println("0 - Voltar")
+	fmt.Print("Digite uma opção: ")
+	opcaoBuscaStr := utils.ReadLine()
+	opcaoBusca, err := strconv.Atoi(opcaoBuscaStr)
+	if err != nil {
+		os.Exit(0)
+	}
+	switch opcaoBusca {
+	case 1:
+		Editar(pessoas, p.Id)
+	case 2:
+		fmt.Print("Tem certeza que deseja excluir? s/n: ")
+		sN := utils.ReadLine()
+		switch sN {
+		case "s":
+			deletarPessoa(pessoas, p.Id)
+		case "n":
+			return
+		}
+	}
 }
