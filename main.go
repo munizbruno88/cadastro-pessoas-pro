@@ -22,9 +22,8 @@ func main() {
 		fmt.Print("Digite um comando: ")
 		opcaostr := utils.ReadLine()
 		opcao, err := strconv.Atoi(opcaostr)
-		if err != nil {
-			fmt.Println("Opção inválida! Digite apenas numeros.")
-			break
+		if utils.CheckError(err, "Erro ao converter entrada para número:") {
+			os.Exit(0)
 		}
 		fmt.Println("")
 		switch opcao {

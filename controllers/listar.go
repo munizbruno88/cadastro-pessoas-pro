@@ -20,7 +20,7 @@ func ListarPessoas(pessoas []models.Pessoa) {
 		fmt.Print("Digite 0 para voltar: ")
 		sairStr := utils.ReadLine()
 		sair, err := strconv.Atoi(sairStr)
-		if err != nil {
+		if utils.CheckError(err, "Erro ao converter entrada para número:") {
 			os.Exit(0)
 		}
 		if sair == 0 {

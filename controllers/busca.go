@@ -49,7 +49,7 @@ func BuscarPessoas(pessoas *[]models.Pessoa) {
 			fmt.Print("Digite o ID: ")
 			iDStr := utils.ReadLine()
 			iD, err := strconv.Atoi(iDStr)
-			if err != nil {
+			if utils.CheckError(err, "Erro ao converter entrada para número:") {
 				os.Exit(0)
 			}
 			encontrado := false
@@ -114,7 +114,7 @@ func BuscaMenu(p models.Pessoa, pessoas *[]models.Pessoa) {
 	fmt.Print("Digite uma opção: ")
 	opcaoBuscaStr := utils.ReadLine()
 	opcaoBusca, err := strconv.Atoi(opcaoBuscaStr)
-	if err != nil {
+	if utils.CheckError(err, "Erro ao converter entrada para número:") {
 		os.Exit(0)
 	}
 	switch opcaoBusca {

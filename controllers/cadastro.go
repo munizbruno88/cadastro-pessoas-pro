@@ -33,7 +33,7 @@ func CadastarPessoa(pessoas []models.Pessoa) []models.Pessoa {
 			fmt.Print("Digite a idade: ")
 			idadeStr := utils.ReadLine()
 			idade, err := strconv.Atoi(idadeStr)
-			if err != nil {
+			if utils.CheckError(err, "Erro ao converter entrada para número:") {
 				os.Exit(0)
 			}
 			if idade > 0 && idade < 150 {
@@ -67,7 +67,7 @@ func CadastarPessoa(pessoas []models.Pessoa) []models.Pessoa {
 			fmt.Print("Digite a altura: ")
 			alturaStr := utils.ReadLine()
 			altura, err := strconv.ParseFloat(alturaStr, 64)
-			if err != nil {
+			if utils.CheckError(err, "Erro ao converter entrada para número:") {
 				os.Exit(0)
 			}
 			p.Altura = altura
